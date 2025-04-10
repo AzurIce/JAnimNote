@@ -914,6 +914,10 @@ class BuiltTimeline:
                 camera_info = camera.points.info
                 anti_alias_radius = self.cfg.anti_alias_width / 2 * camera_info.scaled_factor
 
+                #? 相机具有一个初始 `size` 即对应 `CONFIG` 中的 `frame_width` 和 `frame_height`
+                #?
+                #? `JA_CAMERA_SCALED_FACTOR` 为相对与原始 `size` 的缩放比例（`size[1] / orig_height`），用于
+                #? 确保 `JA_FIXED_IN_FRAME` 的物件具有一致的 `radius`
                 set_global_uniforms(
                     ctx,
                     ('JA_CAMERA_SCALED_FACTOR', camera_info.scaled_factor),
