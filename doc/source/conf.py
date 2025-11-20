@@ -8,6 +8,36 @@ import sys
 
 from janim import __version__
 
+DEFAULT_LANGUAGE = "zh_CN"
+
+
+def _normalize_language(value: str) -> str:
+    if not value:
+        return DEFAULT_LANGUAGE
+
+    prepared = value.strip().replace("-", "_")
+    if not prepared:
+        return DEFAULT_LANGUAGE
+
+    lowered = prepared.lower()
+    mapping = {
+        "zh_cn": "zh_CN",
+        "zh": "zh_CN",
+        "zh_hans": "zh_CN",
+        "zh-hans": "zh_CN",
+        "en_us": "en",
+        "en_gb": "en",
+        "en": "en",
+    }
+    if lowered in mapping:
+        return mapping[lowered]
+
+    if "_" in lowered:
+        major, minor = lowered.split("_", 1)
+        return f"{major}_{minor.upper()}"
+
+    return lowered
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -35,7 +65,12 @@ autodoc_member_order = 'bysource'
 templates_path = ['_templates']
 exclude_patterns = ['._*', '**/._*']
 
-language = 'zh_CN'
+# 优先使用自定义环境变量，其次兼容 Read the Docs 提供的语言代码
+language = _normalize_language(
+    os.environ.get("JANIM_DOC_LANGUAGE")
+    or os.environ.get("READTHEDOCS_LANGUAGE")
+    or DEFAULT_LANGUAGE
+)
 locale_dirs = ['locales/']
 gettext_compact = False     # optional
 

@@ -39,7 +39,8 @@
 .. code-block:: sh
 
     pip install -e .[gui,doc]
-    pip install sphinx-intl
+
+``doc`` 这一额外依赖组选项已经包含 ``sphinx-intl``，因此无需再单独安装。
 
 2. 提取翻译文本
 
@@ -114,6 +115,25 @@ pot 文件是提取出来的可供翻译的源语言文字，你还需要使用�
     因为这个其实是不需要手动翻译的
 
 翻译后，提交你的更改，创建合并到 ``main`` 分支的 Pull Request
+
+指定构建语言
+----------------------
+
+.. note::
+
+    ``conf.py`` 会优先读取 ``JANIM_DOC_LANGUAGE``，其次读取 Read the Docs 自动注入的 ``READTHEDOCS_LANGUAGE``。
+    这两个环境变量最终会被规范化为 Sphinx 支持的语言代码（例如 ``zh_CN``、``en``）。
+
+在 Read the Docs 平台上，你只要在仪表盘中启用对应语言的版本即可，构建时会自动切换。
+
+在本地想要强制使用特定语言构建时，可以在任意 ``sphinx-build``/``make`` 命令前添加环境变量：
+
+.. code-block:: sh
+
+    # 例如强制生成英文版本
+    JANIM_DOC_LANGUAGE=en make html
+
+``make_i18n``/``make_i18n.sh`` 依旧可以使用，它们通过 ``-D language=<lang>`` 覆盖配置，等效于显式设置 ``JANIM_DOC_LANGUAGE``。
 
 在本地构建文档
 ----------------------
