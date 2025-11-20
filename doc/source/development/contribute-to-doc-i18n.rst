@@ -39,8 +39,7 @@
 .. code-block:: sh
 
     pip install -e .[gui,doc]
-
-``doc`` 这一额外依赖组选项已经包含 ``sphinx-intl``，因此无需再单独安装。
+    pip install sphinx-intl
 
 2. 提取翻译文本
 
